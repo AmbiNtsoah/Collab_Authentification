@@ -15,8 +15,7 @@ import java.util.regex.Pattern;
 
 public class DBConnect implements AuthService {
     private static final String URL = "jdbc:sqlite:users.db";
-    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
-    private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&*]).{12,}$");
+    
 
     /**
      * Crée la table si elle n'éxiste pas encore
@@ -62,15 +61,6 @@ public class DBConnect implements AuthService {
      * */
     @Override
     public void register(String username, String password) {
-    	if (!isValidEmail(username)) {
-            throw new IllegalArgumentException("Format d'email invalide");
-        }
-    	if (emailExists(username)) {
-            throw new IllegalArgumentException("Cet email est déjà utilisé");
-        }
-    	if (!isValidPassword(password)) {
-            throw new IllegalArgumentException("Le mot de passe doit contenir au moins 12 caractères, une majuscule, un chiffre et un caractère spécial (@#$%^&*)");
-        }
         String hashedPassword = HashUtils.hashPassword(password);
         String sql = "INSERT INTO users(username, password) VALUES(?, ?)";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -84,10 +74,6 @@ public class DBConnect implements AuthService {
         }
     }
     
-    private boolean isValidEmail(String email) {
-        Matcher matcher = EMAIL_PATTERN.matcher(email);
-        return matcher.matches();
-    }
     private boolean emailExists(String email) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -99,16 +85,6 @@ public class DBConnect implements AuthService {
             e.printStackTrace();
             throw new CustomException("Erreur de lecture de la base de données");
         }
-    }
-    /**
-     * Vérifie si le mot de passe est valide.
-     *
-     * @param password Le mot de passe à vérifier.
-     * @return true si le mot de passe est valide, false sinon.
-     */
-    private boolean isValidPassword(String password) {
-        Matcher matcher = PASSWORD_PATTERN.matcher(password);
-        return matcher.matches();
     }
  // Ajout de la méthode getAllUsers
     public List<User> getAllUsers() {
