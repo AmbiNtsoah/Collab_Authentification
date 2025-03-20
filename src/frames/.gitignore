@@ -4,3 +4,4 @@
 /SignUpFrame.class
 /AuthService.class
 /FileAuthService.class
+/CustomException.class

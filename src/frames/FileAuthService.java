@@ -25,6 +25,7 @@ public class FileAuthService implements AuthService {
             }
         } catch (IOException ex) {
             ex.printStackTrace();
+            throw new CustomException("Erreur de lecture du fichier");
         }
         return false;
     }
@@ -46,6 +47,7 @@ public class FileAuthService implements AuthService {
             out.println(username + ":" + password);
         } catch (IOException ex) {
             ex.printStackTrace();
+            throw new CustomException("Erreur de lecture du fichier");
         }
     }
 
