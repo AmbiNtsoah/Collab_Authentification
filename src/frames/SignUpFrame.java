@@ -26,7 +26,7 @@ public class SignUpFrame extends JFrame {
     private JPasswordField confirmPassword;
     private JPasswordField createPassword;
     private JTextField loginUser;
-    private AuthService authService = new FileAuthService();
+    private AuthService authService = new DBConnect();
 
     /**
      * Constructeur qui permet de créer notre interface utilisateur pour s'inscrire.
@@ -147,7 +147,7 @@ public class SignUpFrame extends JFrame {
         } else if (!confirmPasswordUser.equals(createPasswordUser)) {
             JOptionPane.showMessageDialog(this, "Les mots de passe ne sont pas identiques !", "Erreur", JOptionPane.ERROR_MESSAGE);
         } else {
-        	try {
+            try {
                 authService.register(emailUser, createPasswordUser);
                 JOptionPane.showMessageDialog(this, "Inscription réussie !", "Info", JOptionPane.INFORMATION_MESSAGE);
                 redirectLogin();
