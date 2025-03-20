@@ -1,4 +1,4 @@
-package principal;
+package frames;
 
 import java.awt.EventQueue;
 
