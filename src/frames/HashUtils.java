@@ -4,7 +4,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 
-
+/**
+ * Classe spécifique pour sécuriser les mots de passe enregistrés.
+ * Utilisation de hashage avec SHA-256
+ */
 public class HashUtils {
     public static String hashPassword(String password) {
         try {

@@ -124,7 +124,7 @@ public class Main extends JFrame {
         if (userLogin.isEmpty() || userPassword.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !", "Erreur", JOptionPane.ERROR_MESSAGE);
         } else if (authService.login(userLogin, userPassword)) {
-        	 redirectToCRUD();
+        	 redirectToCRUD(); /** Rediriger vers l'interface CRUD */
         } else {
             JOptionPane.showMessageDialog(this, "Login ou mot de passe incorrect !", "Erreur", JOptionPane.ERROR_MESSAGE);
         }

@@ -3,15 +3,10 @@ package frames;
 import frames.HashUtils;
 import frames.AuthService;
 import java.sql.*;
-
-import java.beans.Statement;
-import java.io.IOException;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class DBConnect implements AuthService {
     private static final String URL = "jdbc:sqlite:users.db";
@@ -19,8 +14,8 @@ public class DBConnect implements AuthService {
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&*]).{12,}$");
 
     /**
-     * Crée la table si elle n'éxiste pas encore
-     * */
+     * Constructeur pour créer la table si elle n'existe pas encore.
+     */
     public DBConnect() {
         try (Connection conn = DriverManager.getConnection(URL)) {
             if (conn != null) {
@@ -39,8 +34,9 @@ public class DBConnect implements AuthService {
     }
 
     /**
-     * Methode pour permettre la connexion utilisateurs déjà inscrit
-     * */
+     * Methode pour permettre la connexion aux 
+     * utilisateurs déjà inscris
+     */
     @Override
     public boolean login(String username, String password) {
         String hashedPassword = HashUtils.hashPassword(password);
@@ -58,17 +54,17 @@ public class DBConnect implements AuthService {
     }
 
     /**
-     * Methode pour permettre l'inscription des nouveaux utilisateurs
-     * */
+     * Methode pour inscrire les nouveaux utilisateurs
+     */
     @Override
     public void register(String username, String password) {
-    	if (!isValidEmail(username)) {
+        if (!isValidEmail(username)) {
             throw new IllegalArgumentException("Format d'email invalide");
         }
-    	if (emailExists(username)) {
+        if (emailExists(username)) {
             throw new IllegalArgumentException("Cet email est déjà utilisé");
         }
-    	if (!isValidPassword(password)) {
+        if (!isValidPassword(password)) {
             throw new IllegalArgumentException("Le mot de passe doit contenir au moins 12 caractères, une majuscule, un chiffre et un caractère spécial (@#$%^&*)");
         }
         String hashedPassword = HashUtils.hashPassword(password);
@@ -83,11 +79,35 @@ public class DBConnect implements AuthService {
             throw new CustomException("Erreur d'enregistrement dans la base de données");
         }
     }
-    
+
+    /**
+     * Methode qui vérifie que le login (email) de l'utilisateur
+     * soit conforme aux éxigences. Doit contenir un @
+     * 
+     */
     private boolean isValidEmail(String email) {
+        if (!email.contains("@")) {
+            throw new IllegalArgumentException("L'email doit contenir un '@'");
+        }
         Matcher matcher = EMAIL_PATTERN.matcher(email);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException("Format d'email invalide");
+        }
+        return true;
+    }
+
+    /**
+     * Methode qui vérifie que le mot de passe saisie
+     * est unmot de passe fort
+     */
+    private boolean isValidPassword(String password) {
+        Matcher matcher = PASSWORD_PATTERN.matcher(password);
         return matcher.matches();
     }
+
+    /**
+     * Methode qui va vérifier si l'email éxiste
+     */
     private boolean emailExists(String email) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -100,17 +120,11 @@ public class DBConnect implements AuthService {
             throw new CustomException("Erreur de lecture de la base de données");
         }
     }
+
     /**
-     * Vérifie si le mot de passe est valide.
-     *
-     * @param password Le mot de passe à vérifier.
-     * @return true si le mot de passe est valide, false sinon.
+     * Methode afficher tous les utilisateurs
+     * @return
      */
-    private boolean isValidPassword(String password) {
-        Matcher matcher = PASSWORD_PATTERN.matcher(password);
-        return matcher.matches();
-    }
- // Ajout de la méthode getAllUsers
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM users";
@@ -127,7 +141,12 @@ public class DBConnect implements AuthService {
         return users;
     }
 
-    // Méthode pour ajouter un nouvel utilisateur
+    /**
+     * Methode qui permet d'ajouter un nouvel utilisateur
+     * dans la base de données
+     * @param username
+     * @param password
+     */
     public void addUser(String username, String password) {
         String hashedPassword = HashUtils.hashPassword(password);
         String sql = "INSERT INTO users(username, password) VALUES(?, ?)";
@@ -142,7 +161,9 @@ public class DBConnect implements AuthService {
         }
     }
 
-    // Méthode pour lire les informations d'un utilisateur
+    /**
+     * Methode pour récuperer un utilisateur spécifiquement
+     */
     public User getUser(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -160,7 +181,13 @@ public class DBConnect implements AuthService {
         }
     }
 
-    // Méthode pour mettre à jour les informations d'un utilisateur
+    /**
+     * Methode qui permet de mettre à jour 
+     * modifier les données d'un utilisateur
+     * @param id
+     * @param newUsername
+     * @param newPassword
+     */
     public void updateUser(int id, String newUsername, String newPassword) {
         String hashedPassword = HashUtils.hashPassword(newPassword);
         String sql = "UPDATE users SET username = ?, password = ? WHERE id = ?";
@@ -175,8 +202,11 @@ public class DBConnect implements AuthService {
             throw new CustomException("Erreur de mise à jour de la base de données");
         }
     }
-
-    // Méthode pour supprimer un utilisateur
+    
+    /**
+     * Methode qui va permettre de supprimer un utilisateur
+     * @param id
+     */
     public void deleteUser(int id) {
         String sql = "DELETE FROM users WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -188,8 +218,12 @@ public class DBConnect implements AuthService {
             throw new CustomException("Erreur de suppression de la base de données");
         }
     }
-    
- // Méthode pour réinitialiser le mot de passe
+
+    /**
+     * Methode qui permet de réinitialiser le mot de passe d'un utilisateur séléctionné
+     * @param id
+     * @param newPassword
+     */
     public void resetPassword(int id, String newPassword) {
         String hashedPassword = HashUtils.hashPassword(newPassword);
         String sql = "UPDATE users SET password = ? WHERE id = ?";

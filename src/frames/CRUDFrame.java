@@ -19,6 +19,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
+/**
+ * Classe qui nous permet d'afficher l'interface
+ * graphique afin que l'utilisateur puisse perfomer des opérations CRUD
+ */
 public class CRUDFrame extends JFrame {
     private static final long serialVersionUID = 1L;
     private JPanel contentPane;
@@ -180,7 +184,9 @@ public class CRUDFrame extends JFrame {
         loadUsers();
     }
 
-    // Méthode pour ajouter un utilisateur
+    /**
+     * Methode pour ajouter les utilisatuers
+     */
     private void addUser() {
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -189,7 +195,9 @@ public class CRUDFrame extends JFrame {
         loadUsers();
     }
 
-    // Méthode pour mettre à jour les informations d'un utilisateur
+    /**
+     * Méthode pour mettre à jour les informations d'un utilisateur
+     */
     private void updateUser() {
         int id = Integer.parseInt(idField.getText());
         String username = usernameField.getText();
@@ -199,7 +207,9 @@ public class CRUDFrame extends JFrame {
         loadUsers();
     }
 
-    // Méthode pour supprimer un utilisateur
+    /**
+     * Méthode pour supprimer un utilisateur
+     */
     private void deleteUser() {
         int id = Integer.parseInt(idField.getText());
         dbConnect.deleteUser(id);
@@ -207,7 +217,9 @@ public class CRUDFrame extends JFrame {
         loadUsers();
     }
 
-    // Méthode pour réinitialiser le mot de passe
+    /**
+     * Méthode pour réinitialiser le mot de passe
+     */
     private void resetPassword() {
         int id = Integer.parseInt(idField.getText());
         String newPassword = newPasswordField.getText();
@@ -216,7 +228,9 @@ public class CRUDFrame extends JFrame {
         loadUsers();
     }
 
-    // Méthode pour charger les utilisateurs dans le tableau
+    /**
+     * Méthode pour charger les utilisateurs dans le tableau
+     */
     private void loadUsers() {
         DefaultTableModel model = (DefaultTableModel) table.getModel();
         model.setRowCount(0); // Clear existing rows
