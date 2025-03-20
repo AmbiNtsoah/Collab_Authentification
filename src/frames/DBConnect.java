@@ -13,12 +13,10 @@ public class DBConnect implements AuthService {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&*]).{12,}$");
 
-<<<<<<< HEAD
+
     /**
      * Constructeur pour créer la table si elle n'existe pas encore.
      */
-=======
->>>>>>> 904da170c8b926ceea214f54067c50aaa58dd8d9
     public DBConnect() {
         try (Connection conn = DriverManager.getConnection(URL)) {
             if (conn != null) {
@@ -36,13 +34,10 @@ public class DBConnect implements AuthService {
         }
     }
 
-<<<<<<< HEAD
     /**
      * Methode pour permettre la connexion aux 
      * utilisateurs déjà inscris
      */
-=======
->>>>>>> 904da170c8b926ceea214f54067c50aaa58dd8d9
     @Override
     public boolean login(String username, String password) {
         String hashedPassword = HashUtils.hashPassword(password);
@@ -59,12 +54,9 @@ public class DBConnect implements AuthService {
         }
     }
 
-<<<<<<< HEAD
     /**
      * Methode pour inscrire les nouveaux utilisateurs
      */
-=======
->>>>>>> 904da170c8b926ceea214f54067c50aaa58dd8d9
     @Override
     public void register(String username, String password) {
         if (!isValidEmail(username)) {
@@ -89,14 +81,11 @@ public class DBConnect implements AuthService {
         }
     }
 
-<<<<<<< HEAD
     /**
      * Methode qui vérifie que le login (email) de l'utilisateur
      * soit conforme aux éxigences. Doit contenir un @
      * 
      */
-=======
->>>>>>> 904da170c8b926ceea214f54067c50aaa58dd8d9
     private boolean isValidEmail(String email) {
         if (!email.contains("@")) {
             throw new IllegalArgumentException("L'email doit contenir un '@'");
@@ -108,24 +97,18 @@ public class DBConnect implements AuthService {
         return true;
     }
 
-<<<<<<< HEAD
     /**
      * Methode qui vérifie que le mot de passe saisie
      * est unmot de passe fort
      */
-=======
->>>>>>> 904da170c8b926ceea214f54067c50aaa58dd8d9
     private boolean isValidPassword(String password) {
         Matcher matcher = PASSWORD_PATTERN.matcher(password);
         return matcher.matches();
     }
 
-<<<<<<< HEAD
     /**
      * Methode qui va vérifier si l'email éxiste
      */
-=======
->>>>>>> 904da170c8b926ceea214f54067c50aaa58dd8d9
     private boolean emailExists(String email) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -139,13 +122,10 @@ public class DBConnect implements AuthService {
         }
     }
 
-<<<<<<< HEAD
     /**
      * Methode afficher tous les utilisateurs
      * @return
      */
-=======
->>>>>>> 904da170c8b926ceea214f54067c50aaa58dd8d9
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM users";
@@ -162,15 +142,12 @@ public class DBConnect implements AuthService {
         return users;
     }
 
-<<<<<<< HEAD
     /**
      * Methode qui permet d'ajouter un nouvel utilisateur
      * dans la base de données
      * @param username
      * @param password
      */
-=======
->>>>>>> 904da170c8b926ceea214f54067c50aaa58dd8d9
     public void addUser(String username, String password) {
         String hashedPassword = HashUtils.hashPassword(password);
         String sql = "INSERT INTO users(username, password) VALUES(?, ?)";
@@ -185,12 +162,10 @@ public class DBConnect implements AuthService {
         }
     }
 
-<<<<<<< HEAD
+
     /**
      * Methode pour récuperer un utilisateur spécifiquement
      */
-=======
->>>>>>> 904da170c8b926ceea214f54067c50aaa58dd8d9
     public User getUser(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -208,16 +183,13 @@ public class DBConnect implements AuthService {
         }
     }
 
-<<<<<<< HEAD
-    /**
+   /**
      * Methode qui permet de mettre à jour 
      * modifier les données d'un utilisateur
      * @param id
      * @param newUsername
      * @param newPassword
      */
-=======
->>>>>>> 904da170c8b926ceea214f54067c50aaa58dd8d9
     public void updateUser(int id, String newUsername, String newPassword) {
         String hashedPassword = HashUtils.hashPassword(newPassword);
         String sql = "UPDATE users SET username = ?, password = ? WHERE id = ?";
@@ -232,15 +204,12 @@ public class DBConnect implements AuthService {
             throw new CustomException("Erreur de mise à jour de la base de données");
         }
     }
-<<<<<<< HEAD
+
     
     /**
      * Methode qui va permettre de supprimer un utilisateur
      * @param id
      */
-=======
-
->>>>>>> 904da170c8b926ceea214f54067c50aaa58dd8d9
     public void deleteUser(int id) {
         String sql = "DELETE FROM users WHERE id = ?";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -253,14 +222,13 @@ public class DBConnect implements AuthService {
         }
     }
 
-<<<<<<< HEAD
+
     /**
      * Methode qui permet de réinitialiser le mot de passe d'un utilisateur séléctionné
      * @param id
      * @param newPassword
      */
-=======
->>>>>>> 904da170c8b926ceea214f54067c50aaa58dd8d9
+
     public void resetPassword(int id, String newPassword) {
         String hashedPassword = HashUtils.hashPassword(newPassword);
         String sql = "UPDATE users SET password = ? WHERE id = ?";
