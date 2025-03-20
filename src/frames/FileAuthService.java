@@ -2,6 +2,7 @@ package frames;
 import java.io.*;
 import java.util.Scanner;
 import java.util.regex.*;
+import frames.HashUtils;
 
 /**
  * Classe pour gérer l'authentification des utilisateurs et le stockage des données dans un fichier.
@@ -16,10 +17,11 @@ public class FileAuthService implements AuthService {
      */
     @Override
     public boolean login(String username, String password) {
+    	String hashedPassword = HashUtils.hashPassword(password);
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 String[] credentials = scanner.nextLine().split(":");
-                if (credentials.length == 2 && credentials[0].equals(username) && credentials[1].equals(password)) {
+                if (credentials.length == 2 && credentials[0].equals(username) && credentials[1].equals(hashedPassword)) {
                     return true;
                 }
             }
@@ -44,10 +46,11 @@ public class FileAuthService implements AuthService {
         if (emailExists(username)) {
             throw new IllegalArgumentException("Cet email est déjà utilisé");
         }
+        String hashedPassword = HashUtils.hashPassword(password);
         try (FileWriter fw = new FileWriter(file, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
-            out.println(username + ":" + password);
+            out.println(username + ":" + hashedPassword);
         } catch (IOException ex) {
             ex.printStackTrace();
             throw new CustomException("Erreur de lecture du fichier");
