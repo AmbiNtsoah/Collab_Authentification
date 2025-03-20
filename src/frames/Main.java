@@ -124,10 +124,17 @@ public class Main extends JFrame {
         if (userLogin.isEmpty() || userPassword.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !", "Erreur", JOptionPane.ERROR_MESSAGE);
         } else if (authService.login(userLogin, userPassword)) {
-            JOptionPane.showMessageDialog(this, "Connexion réussie !", "Info", JOptionPane.INFORMATION_MESSAGE);
+        	 redirectToCRUD();
         } else {
             JOptionPane.showMessageDialog(this, "Login ou mot de passe incorrect !", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    /**
+     * Méthode pour rediriger vers l'interface CRUD.
+     */
+    private void redirectToCRUD() {
+        new CRUDFrame().setVisible(true);
+        this.setVisible(false);
     }
 
     /**
