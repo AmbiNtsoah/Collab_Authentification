@@ -3,7 +3,6 @@ package frames;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -15,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.List;
@@ -25,8 +25,8 @@ public class CRUDFrame extends JFrame {
     private JTextField usernameField;
     private JTextField passwordField;
     private JTextField idField;
+    private JTextField newPasswordField;
     private JTable table;
-    
     private DBConnect dbConnect = new DBConnect();
 
     /**
@@ -34,7 +34,7 @@ public class CRUDFrame extends JFrame {
      */
     public CRUDFrame() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 600, 400);
+        setBounds(100, 100, 600, 450);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
@@ -64,6 +64,13 @@ public class CRUDFrame extends JFrame {
         passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         passwordField.setColumns(10);
 
+        JLabel newPasswordLabel = new JLabel("New Password:");
+        newPasswordLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+
+        newPasswordField = new JTextField();
+        newPasswordField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        newPasswordField.setColumns(10);
+
         JButton addButton = new JButton("Add");
         addButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         addButton.addActionListener(new ActionListener() {
@@ -85,6 +92,14 @@ public class CRUDFrame extends JFrame {
         deleteButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 deleteUser();
+            }
+        });
+
+        JButton resetPasswordButton = new JButton("Reset Password");
+        resetPasswordButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        resetPasswordButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                resetPassword();
             }
         });
 
@@ -111,17 +126,20 @@ public class CRUDFrame extends JFrame {
                             .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
                                 .addComponent(idLabel)
                                 .addComponent(usernameLabel)
-                                .addComponent(passwordLabel))
+                                .addComponent(passwordLabel)
+                                .addComponent(newPasswordLabel))
                             .addGap(18)
                             .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
                                 .addComponent(idField)
                                 .addComponent(usernameField)
-                                .addComponent(passwordField, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
+                                .addComponent(passwordField)
+                                .addComponent(newPasswordField, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))
                             .addGap(18)
                             .addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
                                 .addComponent(addButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(updateButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(deleteButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(deleteButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(resetPasswordButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(gl_contentPane.createSequentialGroup()
                             .addGap(30)
                             .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 500, GroupLayout.PREFERRED_SIZE)))
@@ -147,6 +165,11 @@ public class CRUDFrame extends JFrame {
                         .addComponent(passwordLabel)
                         .addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                         .addComponent(deleteButton))
+                    .addGap(18)
+                    .addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(newPasswordLabel)
+                        .addComponent(newPasswordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(resetPasswordButton))
                     .addGap(30)
                     .addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
                     .addContainerGap(30, Short.MAX_VALUE))
@@ -181,6 +204,15 @@ public class CRUDFrame extends JFrame {
         int id = Integer.parseInt(idField.getText());
         dbConnect.deleteUser(id);
         JOptionPane.showMessageDialog(this, "Utilisateur supprimé avec succès !");
+        loadUsers();
+    }
+
+    // Méthode pour réinitialiser le mot de passe
+    private void resetPassword() {
+        int id = Integer.parseInt(idField.getText());
+        String newPassword = newPasswordField.getText();
+        dbConnect.resetPassword(id, newPassword);
+        JOptionPane.showMessageDialog(this, "Mot de passe réinitialisé avec succès !");
         loadUsers();
     }
 

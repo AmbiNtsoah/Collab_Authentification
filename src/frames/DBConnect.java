@@ -147,4 +147,19 @@ public class DBConnect implements AuthService {
             throw new CustomException("Erreur de suppression de la base de données");
         }
     }
+    
+ // Méthode pour réinitialiser le mot de passe
+    public void resetPassword(int id, String newPassword) {
+        String hashedPassword = HashUtils.hashPassword(newPassword);
+        String sql = "UPDATE users SET password = ? WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, hashedPassword);
+            pstmt.setInt(2, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new CustomException("Erreur de réinitialisation du mot de passe");
+        }
+    }
 }
