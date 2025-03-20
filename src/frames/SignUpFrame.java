@@ -29,6 +29,7 @@ public class SignUpFrame extends JFrame {
 	private JPasswordField confirmPassword;
 	private JPasswordField createPassword;
 	private JTextField loginUser;
+	private AuthService authService = new FileAuthService();
 
 	/**
 	 * Constructeur qui permet de créer l'interface graphique
@@ -70,7 +71,7 @@ public class SignUpFrame extends JFrame {
 		
 		JButton signUpButton = new JButton("S'inscrire");
 		signUpButton.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		
+		signUpButton.addActionListener(event -> signingUp());
 		
 		JLabel redirectLoginLabel = new JLabel("Déjà un compte ?");
 		redirectLoginLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -137,11 +138,24 @@ public class SignUpFrame extends JFrame {
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
-	
 	/**
-	 * Inscrire le nouveau utilisateur
-	 * */
-	
+     * Inscrire le nouveau utilisateur.
+     */
+    private void signingUp() {
+        String emailUser = loginUser.getText();
+        String createPasswordUser = new String(createPassword.getPassword());
+        String confirmPasswordUser = new String(confirmPassword.getPassword());
+
+        if (emailUser.isEmpty() || createPasswordUser.isEmpty() || confirmPasswordUser.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !", "Erreur", JOptionPane.ERROR_MESSAGE);
+        } else if (!confirmPasswordUser.equals(createPasswordUser)) {
+            JOptionPane.showMessageDialog(this, "Les mots de passe ne sont pas identiques !", "Erreur", JOptionPane.ERROR_MESSAGE);
+        } else {
+            authService.register(emailUser, createPasswordUser);
+            JOptionPane.showMessageDialog(this, "Inscription réussie !", "Info", JOptionPane.INFORMATION_MESSAGE);
+            redirectLogin();
+        }
+    }
 	
 	/**
 	 * Rediriger vers l'interface de connexion

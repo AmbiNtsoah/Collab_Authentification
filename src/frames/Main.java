@@ -26,7 +26,7 @@ public class Main extends JFrame {
 	private JPanel contentPane;
 	private JTextField loginUserField;
 	private JPasswordField passwordField;
-	// private AuthService authService = new DBConnect();
+	private AuthService authService = new FileAuthService();
 
 	/**
 	 * Constructeur qui permet de créer notre interfce utilisateur pour se connecter.
@@ -126,7 +126,9 @@ public class Main extends JFrame {
 
 	    if (userLogin.isEmpty() || userPassword.isEmpty()) {
 	        JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs !", "Erreur", JOptionPane.ERROR_MESSAGE);
-	    } else {
+	    } else if (authService.login(userLogin, userPassword)) {
+            JOptionPane.showMessageDialog(this, "Connexion réussie !", "Info", JOptionPane.INFORMATION_MESSAGE);
+        } else {
 	        JOptionPane.showMessageDialog(this, "Login ou mot de passe incorrect !", "Erreur", JOptionPane.ERROR_MESSAGE);
 	    }
 	}
