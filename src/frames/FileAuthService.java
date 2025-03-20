@@ -41,6 +41,9 @@ public class FileAuthService implements AuthService {
         if (!isValidPassword(password)) {
             throw new IllegalArgumentException("Le mot de passe doit contenir au moins 12 caractères, une majuscule, un chiffre et un caractère spécial (@#$%^&*)");
         }
+        if (emailExists(username)) {
+            throw new IllegalArgumentException("Cet email est déjà utilisé");
+        }
         try (FileWriter fw = new FileWriter(file, true);
              BufferedWriter bw = new BufferedWriter(fw);
              PrintWriter out = new PrintWriter(bw)) {
@@ -61,7 +64,20 @@ public class FileAuthService implements AuthService {
         Matcher matcher = EMAIL_PATTERN.matcher(email);
         return matcher.matches();
     }
-
+    private boolean emailExists(String email) {
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNextLine()) {
+                String[] credentials = scanner.nextLine().split(":");
+                if (credentials.length == 2 && credentials[0].equals(email)) {
+                    return true;
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            throw new CustomException("Erreur de lecture du fichier");
+        }
+        return false;
+    }
     /**
      * Vérifie si le mot de passe est valide.
      *
