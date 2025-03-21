@@ -1,0 +1,40 @@
+name: Authentification CI
+
+on:
+  push:
+    branches:
+      - master  # Le workflow se déclenche lors d'un push sur la branche 'master'
+  pull_request:
+    branches:
+      - master  # Ou lors d'une pull request vers la branche 'master'
+
+jobs: # Action déclenché lors après un push ou pull request
+  build:
+    runs-on: ubuntu-latest  # Utilise la dernière version stable d'Ubuntu
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2  # Vérifie le code source du dépôt
+
+    - name: Set up Zulu JDK 23
+      uses: actions/setup-java@v2  # Utilise l'action setup-java pour installer JDK
+      with:
+        java-version: '23'  # Spécifie que vous voulez utiliser JDK 23.0.2
+        distribution: 'zulu'  # Utilisation de la distribution Zulu OpenJDK
+
+    - name: Install SQLite JDBC Driver
+      run: |
+        wget https://github.com/xerial/sqlite-jdbc/releases/download/3.42.0.0/sqlite-jdbc-3.42.0.0.jar  # Télécharge le driver JDBC pour SQLite
+
+    - name: Install JUnit 5
+      run: |
+        wget https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.8.2/junit-platform-console-standalone-1.8.2.jar -O junit-platform-console-standalone.jar  # Télécharge JUnit 5
+
+    - name: Compile Java files
+      run: |
+        mkdir -p bin  # Crée le répertoire bin pour les fichiers compilés
+        javac -d bin -cp ".:sqlite-jdbc-3.42.0.0.jar:junit-platform-console-standalone.jar" src/authentification/*.java  # Compile les fichiers .java avec le driver SQLite et JUnit 5
+
+    - name: Run tests
+      run: |
+        java -cp ".:bin:sqlite-jdbc-3.42.0.0.jar:junit-platform-console-standalone.jar" org.junit.platform.console.ConsoleLauncher --scan-classpath  # Exécute vos tests avec JUnit 5 et le driver JDBC SQLite
