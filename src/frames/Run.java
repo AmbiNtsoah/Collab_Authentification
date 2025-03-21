@@ -7,6 +7,10 @@ import java.awt.EventQueue;
  * interface graphique de s'afficher
  */
 public class Run {
+	/**
+	 * Methode consulté par le compilateur JAVA
+	 * Pour exécuter nos codes.
+	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

@@ -63,7 +63,7 @@ public class FileAuthService implements AuthService {
      * @param email L'email à vérifier.
      * @return true si l'email est valide, false sinon.
      */
-    private boolean isValidEmail(String email) {
+    public static boolean isValidEmail(String email) {
         Matcher matcher = EMAIL_PATTERN.matcher(email);
         return matcher.matches();
     }
@@ -87,7 +87,7 @@ public class FileAuthService implements AuthService {
      * @param password Le mot de passe à vérifier.
      * @return true si le mot de passe est valide, false sinon.
      */
-    private boolean isValidPassword(String password) {
+    public static boolean isValidPassword(String password) {
         Matcher matcher = PASSWORD_PATTERN.matcher(password);
         return matcher.matches();
     }
