@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
+/**
+ * Classe qui permet l'interaction de l'application
+ * à la base de données sqlite
+ */
 public class DBConnect implements AuthService {
     private static final String URL = "jdbc:sqlite:users.db";
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
