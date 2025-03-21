@@ -9,6 +9,11 @@ import java.util.Formatter;
  * Utilisation de hashage avec SHA-256
  */
 public class HashUtils {
+	/**
+	 * Methode qui va hashé le mot de passe
+	 * @param password qui va être hashé par l'algorithme SHA-256
+	 * @return
+	 */
     public static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -19,7 +24,12 @@ public class HashUtils {
         }
     }
 
-    
+    /**
+     * Mehode qui transforme le mot de passe hashé en chaîne
+     * de caractère Hexadécimal
+     * @param bytes
+     * @return
+     */
     private static String byteArrayToHexString(byte[] bytes) {
         try (Formatter formatter = new Formatter()) {
 			for (byte b : bytes) {
